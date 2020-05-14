@@ -106,7 +106,6 @@ dsconfig create-token-resource-lookup-method \
 
 dsconfig create-gateway-api-endpoint \
     --endpoint-name pd-rest-api  \
-    --set inbound-base-path:/pd-rest-api  \
     --set inbound-base-path:/directory  \
     --set outbound-base-path:/directory/v1  \
     --set api-server:pingdirectory-http
