@@ -23,7 +23,17 @@ dsconfig create-external-server \
     --type api  \
     --set base-url:https://pingdirectory:${HTTPS_PORT}  \
     --set hostname-verification-method:allow-all  \
+    --set "bind-dn:cn=Directory Manager"
+    --set password<${ROOT_USER_PASSWORD_FILE} \
     --set 'trust-manager-provider:Blind Trust' 
+
+dsconfig create-external-server \
+    --server-name pingfederate  \
+    --type http  \
+    --set base-url:https://pingfederate:9031  \
+    --set hostname-verification-method:allow-all  \
+    --set key-manager-provider:Null  \
+    --set 'trust-manager-provider:Blind Trust'
 
 dsconfig create-load-balancing-algorithm \
     --type failover \
@@ -73,23 +83,19 @@ dsconfig create-scim-resource-type \
     --set id-attribute:entryUUID
 
 dsconfig create-access-token-validator \
-    --validator-name mock-access-token-validator  \
+    --validator-name mock-atv  \
     --type mock  \
-    --set enabled:true 
+    --set enabled:true  \
+    --set evaluation-order-index:1 
 
 dsconfig create-token-resource-lookup-method \
-    --validator-name mock-access-token-validator  \
+    --validator-name mock-atv  \
     --method-name users-by-uid  \
     --type scim  \
     --set evaluation-order-index:100  \
     --set scim-resource-type:Users  \
     --set 'match-filter:uid eq "%_subject_claim_name%"' 
 
-dsconfig create-access-token-validator \
-    --validator-name mock-atv  \
-    --type mock  \
-    --set enabled:true  \
-    --set evaluation-order-index:1 
 
 dsconfig create-token-resource-lookup-method \
     --validator-name mock-atv  \
@@ -102,13 +108,27 @@ dsconfig create-token-resource-lookup-method \
 dsconfig create-gateway-api-endpoint \
     --endpoint-name pd-rest-api  \
     --set inbound-base-path:/pd-rest-api  \
+    --set inbound-base-path:/directory  \
     --set outbound-base-path:/directory/v1  \
     --set api-server:pingdirectory-http
 
 dsconfig set-policy-decision-service-prop \
     --set pdp-mode:embedded  \
-    --set "deployment-package<${SERVER_ROOT_DIR}/resource/simple.SDP" 
-    
+    --set "deployment-package<${SERVER_ROOT_DIR}/resource/simple.SDP" \
+    --set decision-response-view:attributes  \
+    --set decision-response-view:decision-tree  \
+    --set decision-response-view:evaluated-entities  \
+    --set decision-response-view:evaluation-log-with-attribute-values  \
+    --set decision-response-view:request  \
+    --set decision-response-view:services 
+
+# TODO: where to get shared secret? 
+# dsconfig create-sideband-api-shared-secret \
+#    --secret-name PingAccess  \
+#    --set shared-secret:AAA2gcOsxOBSpBFnw/aarrHP3at0UqL0/iY= 
+
+
 # dsconfig set-http-servlet-cross-origin-policy-prop \
 #    --policy-name development-cross-origin-policy  \
 #    --set cors-allowed-origins:* 
+
