@@ -23,7 +23,7 @@ dsconfig create-external-server \
     --type api  \
     --set base-url:https://pingdirectory:${HTTPS_PORT}  \
     --set hostname-verification-method:allow-all  \
-    --set "bind-dn:cn=Directory Manager"
+    --set "user-name:cn=Directory Manager"  \
     --set password<${ROOT_USER_PASSWORD_FILE} \
     --set 'trust-manager-provider:Blind Trust' 
 
