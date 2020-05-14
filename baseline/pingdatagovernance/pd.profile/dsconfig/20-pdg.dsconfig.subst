@@ -87,15 +87,14 @@ dsconfig create-access-token-validator \
     --type mock  \
     --set enabled:true  \
     --set evaluation-order-index:1 
-
-dsconfig create-token-resource-lookup-method \
-    --validator-name mock-atv  \
-    --method-name users-by-uid  \
-    --type scim  \
-    --set evaluation-order-index:100  \
-    --set scim-resource-type:Users  \
-    --set 'match-filter:uid eq "%_subject_claim_name%"' 
-
+# TODO: validate if we need this.
+# dsconfig create-token-resource-lookup-method \
+#     --validator-name mock-atv  \
+#     --method-name users-by-uid  \
+#     --type scim  \
+#     --set evaluation-order-index:100  \
+#     --set scim-resource-type:Users  \
+#     --set 'match-filter:uid eq "%_subject_claim_name%"' 
 
 dsconfig create-token-resource-lookup-method \
     --validator-name mock-atv  \
