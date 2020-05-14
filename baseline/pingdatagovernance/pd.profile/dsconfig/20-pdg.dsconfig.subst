@@ -5,6 +5,12 @@ dsconfig set-trust-manager-provider-prop \
     --provider-name 'Blind Trust'  \
     --set enabled:true
 
+dsconfig set-connection-handler-prop \
+    --handler-name "HTTPS Connection Handler" \
+    --set enabled:true \
+    --set key-manager-provider:JKS \
+    --set trust-manager-provider:JKS
+    
 dsconfig create-external-server \
     --server-name pingdirectory-ldap \
     --set server-host-name:pingdirectory \
@@ -16,7 +22,7 @@ dsconfig create-external-server \
     --set location:${LOCATION} \
     --set connection-security:ssl \
     --set key-manager-provider:Null \
-    --set trust-manager-provider:JKS
+    --set 'trust-manager-provider:Blind Trust'
 
 dsconfig create-external-server \
     --server-name pingdirectory-http  \
@@ -41,11 +47,6 @@ dsconfig create-load-balancing-algorithm \
     --set enabled:true \
     --set backend-server:pingdirectory-ldap
 
-dsconfig set-connection-handler-prop \
-    --handler-name "HTTPS Connection Handler" \
-    --set enabled:true \
-    --set key-manager-provider:JKS \
-    --set trust-manager-provider:JKS
 
 
 #
