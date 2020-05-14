@@ -106,6 +106,7 @@ dsconfig create-token-resource-lookup-method \
     --set 'match-filter:uid eq "%sub%"' 
 
 dsconfig create-gateway-api-endpoint \
+    --set http-auth-evaluation-behavior:evaluate-and-replace  \
     --endpoint-name pd-rest-api  \
     --set inbound-base-path:/directory  \
     --set outbound-base-path:/directory/v1  \
